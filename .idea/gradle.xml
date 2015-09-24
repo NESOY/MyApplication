@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/button" />
             <option value="$PROJECT_DIR$/button4" />
+            <option value="$PROJECT_DIR$/calc" />
           </set>
         </option>
       </GradleProjectSettings>

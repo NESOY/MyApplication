@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">calc</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="plus">더하기</string>
+    <string name="minus">빼기</string>
+    <string name="multiple">곱하기</string>
+    <string name="divide">나누기</string>
+    <string name="remainder">나머지 값</string>
+    <string name="margin">3dp</string>
+</resources>
