@@ -1,11 +1,7 @@
 package com.example.com.image;
 
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -22,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     RadioButton jellybean, kitkat, lolipop;
     Button exit,restart;
     ImageView imgView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,102 +43,65 @@ public class MainActivity extends AppCompatActivity {
         ) {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (switchAgree.isChecked() == true) {
-                    like.setVisibility(android.view.View.VISIBLE);
-                    androidGroup.setVisibility(android.view.View.VISIBLE);
+                int select;
+                if (switchAgree.isChecked())    select = android.view.View.VISIBLE;
+                else                                    select = android.view.View.INVISIBLE;
 
-                    jellybean.setVisibility(android.view.View.VISIBLE);
-                    kitkat.setVisibility(android.view.View.VISIBLE);
-                    lolipop.setVisibility(android.view.View.VISIBLE);
+                like.setVisibility(select);
+                androidGroup.setVisibility(select);
 
-                    imgView.setVisibility(android.view.View.VISIBLE);
+                imgView.setVisibility(select);
 
-                    exit.setVisibility(android.view.View.VISIBLE);
-                    restart.setVisibility(android.view.View.VISIBLE);
-
-                } else {
-                    like.setVisibility(android.view.View.INVISIBLE);
-                    androidGroup.setVisibility(android.view.View.INVISIBLE);
-
-                    jellybean.setVisibility(android.view.View.INVISIBLE);
-                    kitkat.setVisibility(android.view.View.INVISIBLE);
-                    lolipop.setVisibility(android.view.View.INVISIBLE);
-
-                    imgView.setVisibility(android.view.View.INVISIBLE);
-
-                    exit.setVisibility(android.view.View.INVISIBLE);
-                    restart.setVisibility(android.view.View.INVISIBLE);
-                }
+                exit.setVisibility(select);
+                restart.setVisibility(select);
             }
         });
 
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         androidGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch(androidGroup.getCheckedRadioButtonId()){
                     case R.id.jellybean:
+                        imgView.getLayoutParams().height = jellybean.getHeight();
+                        imgView.getLayoutParams().width = jellybean.getWidth();
                         imgView.setImageResource(R.drawable.jellybean);
                         break;
                     case R.id.kitkat:
+                        imgView.getLayoutParams().height = kitkat.getHeight();
+                        imgView.getLayoutParams().width = kitkat.getWidth();
                         imgView.setImageResource(R.drawable.kitkat);
                         break;
                     case R.id.lolipop:
+                        imgView.getLayoutParams().height = lolipop.getHeight();
+                        imgView.getLayoutParams().width = lolipop.getWidth();
                         imgView.setImageResource(R.drawable.lolipop);
                         break;
                 }
             }
         });
 
-
-       restart.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               switchAgree.setChecked(false);
-               like.setVisibility(android.view.View.INVISIBLE);
-               androidGroup.setVisibility(android.view.View.INVISIBLE);
-
-               jellybean.setVisibility(android.view.View.INVISIBLE);
-               jellybean.setChecked(false);
-               kitkat.setVisibility(android.view.View.INVISIBLE);
-               kitkat.setChecked(false);
-               lolipop.setVisibility(android.view.View.INVISIBLE);
-               lolipop.setChecked(false);
-
-               imgView.setVisibility(android.view.View.INVISIBLE);
-               imgView.setImageResource(0);
-
-               exit.setVisibility(android.view.View.INVISIBLE);
-               restart.setVisibility(android.view.View.INVISIBLE);
-           }
-       });
-
     }
+    public void onClick(View view){
+        switch(view.getId()){
+            case R.id.exit:
+                finish();
+                break;
+            case R.id.restart:
+                switchAgree.setChecked(false);
+                like.setVisibility(android.view.View.INVISIBLE);
+                androidGroup.setVisibility(android.view.View.INVISIBLE);
+                androidGroup.clearCheck();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+                imgView.setVisibility(android.view.View.INVISIBLE);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+                imgView.getLayoutParams().height = 0;
+                imgView.getLayoutParams().width = 0;
+                imgView.setImageResource(0);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                exit.setVisibility(android.view.View.INVISIBLE);
+                restart.setVisibility(android.view.View.INVISIBLE);
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
 }

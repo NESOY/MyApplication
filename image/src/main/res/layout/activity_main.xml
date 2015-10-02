@@ -69,13 +69,17 @@
         android:layout_height="wrap_content"
         android:text="종료"
         android:visibility="invisible"
-        android:id="@+id/exit" />
+        android:id="@+id/exit"
+        android:onClick="onClick"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="처음으로"
         android:visibility="invisible"
-        android:id="@+id/restart" />
+        android:id="@+id/restart"
+        android:onClick="onClick"
+        />
 
 </LinearLayout>
