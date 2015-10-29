@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!URL.getText().toString().contains("http://"))
+                if(!URL.getText().toString().matches("http://.*"))
                     URL.setText(URL.getText().insert(0, "http://"));
 
                 webView1.loadUrl(URL.getText().toString());
