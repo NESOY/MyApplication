@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         String str = readDiary(fileName);
         editDiary.setText(str);
         btn.setEnabled(true);
-
         dp.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
