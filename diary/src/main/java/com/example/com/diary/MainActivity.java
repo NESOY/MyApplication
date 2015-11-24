@@ -1,10 +1,8 @@
 package com.example.com.diary;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -12,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 
@@ -76,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             diaryStr = new String(txt).trim();
             btn.setText("수정하기");
         } catch (java.io.IOException e) {
-           editDiary.setHint("일기 없음");
+            editDiary.setHint("일기 없음");
             btn.setText("새로 저장");
         }
         return diaryStr;
