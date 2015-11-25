@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Calendar;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     DatePicker datePicker;
     View datepickDialog;
     String fileName,msg;
+    String sdPath;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -36,12 +39,28 @@ public class MainActivity extends AppCompatActivity
         btnSave = (Button)findViewById(R.id.btnSave);
         editDiary = (EditText)findViewById(R.id.editDiary);
 
+        /* myDiray Directroy 생성 */
+        String sdCardState = Environment.getExternalStorageState();
+
+        if(sdCardState.equals(Environment.MEDIA_MOUNTED)){
+             sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        }else{
+            sdPath = Environment.MEDIA_UNMOUNTED;
+        }
+        final File myDiary = new File(sdPath+"/myDiray");
+        myDiary.mkdir();
+
+        /* 날짜 가져오기 */
         Calendar cal = Calendar.getInstance();
         int  year = cal.get(Calendar.YEAR);
         int  month = cal.get(Calendar.MONTH)+1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
+
         fileName = year+"_"+month+"_"+day+".txt";
         setTextDate(year,month,day);
+        msg = readDiary(fileName);
+        editDiary.setText(msg);
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +85,6 @@ public class MainActivity extends AppCompatActivity
                         int day = datePicker.getDayOfMonth();
                         fileName = year+"_"+month+"_"+day+".txt";
                         setTextDate(year, month, day);
-
                         msg = readDiary(fileName);
                         editDiary.setText(msg);
                     }
@@ -98,6 +116,10 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
     /* setTextDate : 날짜를 textView에 표현 */
     public void setTextDate(int year,int month,int day){
         textDate.setText(year+"년 "+month+"월 "+day+"일");
@@ -110,8 +132,10 @@ public class MainActivity extends AppCompatActivity
             fos.write(str.getBytes());
             fos.close();
             Toast.makeText(getApplicationContext(), fileName + "이 저장됨", Toast.LENGTH_SHORT).show();
+            btnSave.setText("수정하기");
         }catch(java.io.IOException e){
             Toast.makeText(getApplicationContext(),"저장실패",Toast.LENGTH_SHORT).show();
+            btnSave.setText("새로 저장");
         }
     }
     /* readDiary : 다이어리 읽어오기 */
