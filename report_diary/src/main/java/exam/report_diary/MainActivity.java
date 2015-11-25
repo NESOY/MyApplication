@@ -1,7 +1,6 @@
 package exam.report_diary;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,13 +42,15 @@ public class MainActivity extends AppCompatActivity
         String sdCardState = Environment.getExternalStorageState();
 
         if(sdCardState.equals(Environment.MEDIA_MOUNTED)){
-             sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+             sdPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/exam.report_diary/files";
         }else{
-            sdPath = Environment.MEDIA_UNMOUNTED;
+            sdPath = Environment.MEDIA_UNMOUNTED+"/Android/data/exam.report_diary/files";
         }
-        final File myDiary = new File(sdPath+"/myDiray");
-        myDiary.mkdir();
+        final File myDiary = new File(sdPath);
 
+        if( !myDiary.exists() ) {
+            myDiary.mkdirs();
+        }
         /* 날짜 가져오기 */
         Calendar cal = Calendar.getInstance();
         int  year = cal.get(Calendar.YEAR);
@@ -58,14 +59,15 @@ public class MainActivity extends AppCompatActivity
 
         fileName = year+"_"+month+"_"+day+".txt";
         setTextDate(year,month,day);
-        msg = readDiary(fileName);
+        Toast.makeText(getApplicationContext(),sdPath+"/"+fileName, Toast.LENGTH_SHORT).show();
+        msg = readDiary(sdPath+"/"+fileName);
         editDiary.setText(msg);
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveDiary(fileName);
+                saveDiary(sdPath+"/"+fileName);
             }
         });
 
@@ -127,7 +129,8 @@ public class MainActivity extends AppCompatActivity
     /* saveDiary : 다이어리 읽어오기 */
     public void saveDiary(String fileName){
         try {
-            FileOutputStream fos = openFileOutput(fileName, Context.MODE_PRIVATE);
+            File file = new File(fileName);
+            FileOutputStream fos = new FileOutputStream(file);
             String str = editDiary.getText().toString();
             fos.write(str.getBytes());
             fos.close();
