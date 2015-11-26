@@ -17,6 +17,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
@@ -42,9 +44,9 @@ public class MainActivity extends AppCompatActivity
         String sdCardState = Environment.getExternalStorageState();
 
         if(sdCardState.equals(Environment.MEDIA_MOUNTED)){
-             sdPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Android/data/exam.report_diary/files";
+             sdPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
         }else{
-            sdPath = Environment.MEDIA_UNMOUNTED+"/Android/data/exam.report_diary/files";
+            sdPath = Environment.MEDIA_UNMOUNTED;
         }
         final File myDiary = new File(sdPath);
 
@@ -59,7 +61,6 @@ public class MainActivity extends AppCompatActivity
 
         fileName = year+"_"+month+"_"+day+".txt";
         setTextDate(year,month,day);
-        Toast.makeText(getApplicationContext(),sdPath+"/"+fileName, Toast.LENGTH_SHORT).show();
         msg = readDiary(sdPath+"/"+fileName);
         editDiary.setText(msg);
 
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity
                         int day = datePicker.getDayOfMonth();
                         fileName = year+"_"+month+"_"+day+".txt";
                         setTextDate(year, month, day);
-                        msg = readDiary(fileName);
+                        msg = readDiary(sdPath+"/"+fileName);
                         editDiary.setText(msg);
                     }
                 });
@@ -113,9 +114,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -144,13 +145,16 @@ public class MainActivity extends AppCompatActivity
     /* readDiary : 다이어리 읽어오기 */
     public String readDiary(String fileName){
         String diaryStr = null;
-        FileInputStream fis;
         try {
-            fis = openFileInput(fileName);
-            byte[] txt = new byte[500];
-            fis.read(txt);
-            fis.close();
-            diaryStr = new String(txt).trim();
+            File file = new File(fileName);
+            FileInputStream fis = new FileInputStream(file);
+            Reader in = new InputStreamReader(fis);
+            int size = fis.available();
+            char[] buffer = new char[size];
+            in.read(buffer);
+            in.close();
+
+            diaryStr = new String(buffer).trim();
             btnSave.setText("수정하기");
         } catch (java.io.IOException e) {
             editDiary.setHint("일기 없음");
