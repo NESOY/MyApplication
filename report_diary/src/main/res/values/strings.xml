@@ -5,4 +5,7 @@
     <string name="Reread">다시 읽기</string>
     <string name="deleteDiary">읽기 삭제</string>
     <string name="fontSize">글씨 크기</string>
+    <string name="BigFont">글씨 크게</string>
+    <string name="normalFont">글씨 보통</string>
+    <string name="smallFont">글씨 작게</string>
 </resources>
