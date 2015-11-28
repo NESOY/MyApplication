@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     DatePicker datePicker;
     View datepickDialog, deleteDialog;
     String fileName, msg;
-    String sdPath,filePath;
+    String sdPath, filePath;
     private static final int bigFontSize = 25;
     private static final int normalFontSize = 20;
     private static final int smallFontSize = 15;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         String sdCardState = Environment.getExternalStorageState();
 
         if (sdCardState.equals(Environment.MEDIA_MOUNTED)) {    //SDCard가 Mount 된 경우
-            sdPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/mydiary";
+            sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/mydiary";
         } else {    //SDCard가 UnMount 된 경우
             sdPath = Environment.MEDIA_UNMOUNTED;
         }
@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         /* 파일 이름 & 경로 */
-        fileName = makeDiaryFileName(year,month,day);
-        filePath = makeDiaryFilePath(sdPath,fileName);
+        fileName = makeDiaryFileName(year, month, day);
+        filePath = makeDiaryFilePath(sdPath, fileName);
 
         setTextDate(year, month, day);
         msg = readDiary(filePath);
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = editDiary.getText().toString();
-                saveDiary(filePath,content);
+                saveDiary(filePath, content);
             }
         });
 
@@ -96,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
                         int year = datePicker.getYear();
                         int month = datePicker.getMonth() + 1;
                         int day = datePicker.getDayOfMonth();
-                        fileName = makeDiaryFileName(year,month,day);
+                        fileName = makeDiaryFileName(year, month, day);
                         setTextDate(year, month, day);
-                        filePath = makeDiaryFilePath(sdPath,fileName);
+                        filePath = makeDiaryFilePath(sdPath, fileName);
                         msg = readDiary(filePath);
                         editDiary.setText(msg);
                     }
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        filePath = makeDiaryFilePath(sdPath,fileName);
+        filePath = makeDiaryFilePath(sdPath, fileName);
         switch (id) {
             case R.id.menuReread:
                 msg = readDiary(filePath);
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         deleteDiary(filePath);
                         readDiary(filePath);
-                        Toast.makeText(getApplicationContext(),fileName+" 삭제되었습니다.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), fileName + " 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
                 dlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* makeDiaryFilePath : 다이어리 파일 경로 만들기 */
-    public String makeDiaryFilePath(String sdPath,String fileName){
+    public String makeDiaryFilePath(String sdPath, String fileName) {
         return sdPath + "/" + fileName;
     }
 
@@ -186,13 +186,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* saveDiary : 다이어리 저장하기 */
-    public void saveDiary(String filePath,String content) {
+    public void saveDiary(String filePath, String content) {
         try {
             File file = new File(filePath);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(content.getBytes());
             fos.close();
-            Toast.makeText(getApplicationContext(), fileName+" 저장성공 ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), fileName + " 저장성공 ", Toast.LENGTH_SHORT).show();
             btnSave.setText("수정하기");
         } catch (java.io.IOException e) {
             Toast.makeText(getApplicationContext(), "저장실패", Toast.LENGTH_SHORT).show();
@@ -222,8 +222,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* deleteDiary : 다이어리 삭제하기 */
-    public boolean deleteDiary(String fileName) {
-        File file = new File(fileName);
+    public boolean deleteDiary(String filePath) {
+        File file = new File(filePath);
         if (file.exists()) {
             file.delete();
             editDiary.setText("");
