@@ -2,6 +2,7 @@ package exam.report_diary;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -22,11 +23,11 @@ import java.io.Reader;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    TextView textDate;
+    TextView textDate, deleteDate;
     Button btnSave;
     EditText editDiary;
     DatePicker datePicker;
-    View datepickDialog;
+    View datepickDialog, deleteDialog;
     String fileName, msg;
     String sdPath;
 
@@ -43,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
         /* myDiray Directroy 생성 */
         String sdCardState = Environment.getExternalStorageState();
 
-        if (sdCardState.equals(Environment.MEDIA_MOUNTED)) {
-            sdPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        } else {
+        if (sdCardState.equals(Environment.MEDIA_MOUNTED)) {    //SDCard가 Mount 된 경우
+            sdPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/mydiary";
+        } else {    //SDCard가 UnMount 된 경우
             sdPath = Environment.MEDIA_UNMOUNTED;
         }
         final File myDiary = new File(sdPath);
@@ -121,12 +122,27 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "다시읽어왔습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menuDeleteDiary:
-                if(deleteDiary(sdPath + "/" + fileName)) {
-                    Toast.makeText(getApplicationContext(), "일기를 삭제하였습니다.", Toast.LENGTH_SHORT).show();
-                    readDiary(sdPath + "/" + fileName);
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "삭제할 일기가 없습니다.", Toast.LENGTH_SHORT).show();
+                deleteDialog = View.inflate(MainActivity.this, R.layout.delete_dialog, null);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+                dlg.setTitle("일기 삭제");
+                dlg.setView(deleteDialog);
+                deleteDate = (TextView) deleteDialog.findViewById(R.id.deleteDate);
+                deleteDate.setText(fileName + "을 삭제하시겠습니까?");
+                deleteDate.setTextSize(15);
+                deleteDate.setTextColor(Color.RED);
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteDiary(sdPath + "/" + fileName);
+                        Toast.makeText(getApplicationContext(),fileName+" 삭제되었습니다.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog2, int which) {
+                    }
+                });
+                dlg.show();
                 break;
             case R.id.menuBigFont:
                 editDiary.setTextSize(20);
@@ -143,7 +159,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.
+
+                onOptionsItemSelected(item);
+
     }
 
 
@@ -196,8 +215,7 @@ public class MainActivity extends AppCompatActivity {
             file.delete();
             btnSave.setText("새로 저장");
             return true;
-        }
-        else
+        } else
             return false;
     }
 }
